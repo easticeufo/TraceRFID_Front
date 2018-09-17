@@ -1,0 +1,36 @@
+<div class="login-container">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+                <h2>
+                    <i class="icon-stethoscope green"></i>
+                    <span class="white">用户登陆</span>
+                </h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 col-sm-offset-4 col-xs-12">
+                <div class="login-box">
+                    <h4>
+                        <i class="icon-coffee green"></i>
+                        <span class="blue">请输入您的登录信息</span>
+                    </h4>
+                    <div class="has-feedback">
+                        <input class="form-control" type="text" placeholder="用户名" ng-model="username">
+                        <span class="form-control-feedback glyphicon glyphicon-user"></span>
+                    </div>
+                    <div class="has-feedback">
+                        <input class="form-control" type="password" placeholder="密码" ng-model="password">
+                        <span class="form-control-feedback glyphicon glyphicon-lock"></span>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-primary" ng-click="login()">
+                            <i class="icon-key"></i>
+                            <span>登录</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

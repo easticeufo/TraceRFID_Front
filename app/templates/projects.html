@@ -1,0 +1,30 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12">
+            <table class="table table-striped table-bordered center">
+                <caption><h3 align="center">项目列表</h3></caption>
+                <tr class="info">
+                    <th class="center">ID</th>
+                    <th class="center">项目名称</th>
+                    <th class="center">施工方</th>
+                    <th class="center">监理方</th>
+                    <th class="center">操作</th>
+                </tr>
+                <tr ng-repeat="project in projects">
+                    <td>{{project.id}}</td>
+                    <td>{{project.name}}</td>
+                    <td>{{project.constructor}}</td>
+                    <td>{{project.supervisor}}</td>
+                    <td>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <ul uib-pagination ng-change="pageChanged()" total-items="totalItems" ng-model="currentPage"  items-per-page="size" max-size="15" boundary-link-numbers="true" class="pagination-sm" previous-text="上一页" next-text="下一页"></ul>
+        </div>
+    </div>
+</div>
