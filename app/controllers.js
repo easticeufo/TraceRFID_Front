@@ -56,3 +56,34 @@ appControllers.controller("ProjectsController", ["$scope", "ApiProject",
 
     }
 ]);
+
+appControllers.controller("ProductsController", ["$scope", "$stateParams", "ApiProduct",
+    function ($scope, $stateParams, ApiProduct)
+    {
+        $scope.size = 100; // 每页的记录数
+        $scope.currentPage = 1; // 当前页,从1开始
+
+        $scope.pageChanged = function ()
+        {
+            ApiProduct.get(
+                {
+                    size: $scope.size,
+                    page: $scope.currentPage - 1,
+                    projectId: $stateParams.projectId
+                },
+                function (data)
+                {
+                    $scope.totalItems = data.totalElements; // 总记录数
+                    $scope.products = data.content;
+                },
+                function (response)
+                {
+                    alert(response.data.returnMsg);
+                }
+            );
+        };
+
+        $scope.pageChanged();
+
+    }
+]);

@@ -1,0 +1,38 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12">
+            <table class="table table-striped table-bordered center">
+                <caption><h3 align="center">产品列表</h3></caption>
+                <tr class="info">
+                    <th class="center">ID</th>
+                    <th class="center">RFID</th>
+                    <th class="center">型号</th>
+                    <th class="center">批次号</th>
+                    <th class="center">生产日期</th>
+                    <th class="center">生产商</th>
+                    <th class="center">项目名称</th>
+                    <th class="center">安装日期</th>
+                    <th class="center">操作</th>
+                </tr>
+                <tr ng-repeat="product in products">
+                    <td>{{product.id}}</td>
+                    <td>{{product.rfid}}</td>
+                    <td>{{product.model}}</td>
+                    <td>{{product.batchNumber}}</td>
+                    <td>{{product.buildTime | date: "yyyy-MM-dd"}}</td>
+                    <td>{{product.manufacturer && product.manufacturer.name}}</td>
+                    <td>{{product.project && product.project.name}}</td>
+                    <td>{{product.installTime | date: "yyyy-MM-dd"}}</td>
+                    <td>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">
+            <ul uib-pagination ng-change="pageChanged()" total-items="totalItems" ng-model="currentPage"  items-per-page="size" max-size="15" boundary-link-numbers="true" class="pagination-sm" previous-text="上一页" next-text="下一页"></ul>
+        </div>
+    </div>
+</div>

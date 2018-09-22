@@ -28,6 +28,16 @@ eastApp.config(["$stateProvider", "$urlRouterProvider",
                 url: "/projects",
                 templateUrl: "templates/projects.html",
                 controller: "ProjectsController"
+            })
+            .state("main.projectProducts", {
+                url: "/projects/{projectId}/products",
+                templateUrl: "templates/products.html",
+                controller: "ProductsController"
+            })
+            .state("main.products", {
+                url: "/products",
+                templateUrl: "templates/products.html",
+                controller: "ProductsController"
             });
     }
 ]);
