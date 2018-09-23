@@ -24,6 +24,7 @@
                     <td>{{product.project && product.project.name}}</td>
                     <td>{{product.installTime | date: "yyyy-MM-dd"}}</td>
                     <td>
+                        <a ui-sref="main.productMap({productId:product.id})" class="btn btn-info btn-xs">地图</a>
                     </td>
                 </tr>
             </table>

@@ -87,3 +87,105 @@ appControllers.controller("ProductsController", ["$scope", "$stateParams", "ApiP
 
     }
 ]);
+
+appControllers.controller("MapController", ["$scope", "$stateParams", "ApiProduct",
+    function ($scope, $stateParams, ApiProduct)
+    {
+        var map = new BMap.Map("bmap-container"); // 创建地图实例
+        var initPoint = new BMap.Point(120.177, 30.28); // 创建点坐标,以杭州为中心
+        map.centerAndZoom(initPoint, 14); // 初始化地图，设置中心点坐标和地图级别
+        map.enableScrollWheelZoom();
+
+        function addMarker(point, clickHandler)
+        {
+            var marker = new BMap.Marker(point);
+            if (typeof clickHandler == "function")
+            {
+                marker.addEventListener("click", clickHandler);
+            }
+
+            map.addOverlay(marker);
+        }
+
+        function getProductInfoWindow(product)
+        {
+            var opts = {
+                width: 200, // 信息窗口宽度
+                height: 100, // 信息窗口高度
+                title: product.model // 信息窗口标题
+            };
+            var content = "RFID: " + product.rfid
+                + "<br>批次号: " + product.batchNumber;
+            if (product.manufacturer != null)
+            {
+                content += ("<br>生产商: " + product.manufacturer.name);
+            }
+            if (product.project != null)
+            {
+                content += ("<br>项目名称: " + product.project.name);
+            }
+
+            return new BMap.InfoWindow(content, opts);
+        }
+
+        function addProductPoint(product)
+        {
+            if (product.longitude && product.latitude)
+            {
+                var point = new BMap.Point(product.longitude, product.latitude);
+                addMarker(point, function ()
+                {
+                    ApiProduct.get({productId:product.id},
+                        function (data)
+                        {
+                            map.openInfoWindow(getProductInfoWindow(data), point); //开启信息窗口
+                        },
+                        function (response)
+                        {
+                            alert(response.data.returnMsg);
+                        }
+                    );
+                });
+                return point;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        if ($stateParams.projectId)
+        {
+            ApiProduct.query({projectId:$stateParams.projectId},
+                function (products)
+                {
+                    for (var i = 0; i < products.length; i++)
+                    {
+                        addProductPoint(products[i]);
+                    }
+                },
+                function (response)
+                {
+                    alert(response.data.returnMsg);
+                }
+            );
+        }
+        else if ($stateParams.productId)
+        {
+            ApiProduct.get({productId:$stateParams.productId},
+                function (product)
+                {
+                    var point = addProductPoint(product);
+                    if (point != null)
+                    {
+                        map.panTo(point); // 让地图平滑移动至新中心点，如果移动距离超过了当前地图区域大小，则地图会直跳到该点
+                    }
+                },
+                function (response)
+                {
+                    alert(response.data.returnMsg);
+                }
+            );
+        }
+    }
+]);
