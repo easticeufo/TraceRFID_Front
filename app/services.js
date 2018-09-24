@@ -41,3 +41,9 @@ restfulApiService.factory("ApiProduct", ["$resource",
         return $resource(testServerAddr + "api/products/:productId", {productId:"@id"}, null);
     }
 ]);
+
+restfulApiService.factory("ApiManufacturer", ["$resource",
+    function ($resource) {
+        return $resource(testServerAddr + "api/manufacturers/:manufacturerId", {manufacturerId:"@id"}, null);
+    }
+]);

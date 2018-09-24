@@ -9,7 +9,7 @@ appControllers.controller("LoginController", ["$scope", "md5", "$state", "ApiLog
         $scope.doLogin = function (username, password) {
             ApiLogin.exec({username: username, password: md5.createHash(password)},
                 function (response) {
-                    $state.go("main");
+                    $state.go("main.projects");
                 },
                 function (response) {
                     alert(response.data.returnMsg);
@@ -88,6 +88,82 @@ appControllers.controller("ProductsController", ["$scope", "$stateParams", "ApiP
     }
 ]);
 
+appControllers.controller("ManufacturersController", ["$scope", "ApiManufacturer",
+    function ($scope, ApiManufacturer)
+    {
+        $scope.manufacturers = ApiManufacturer.query(
+            function () {},
+            function (response)
+            {
+                alert(response.data.returnMsg);
+            }
+        );
+
+        $scope.deleteManufacturer = function (manufacturerId)
+        {
+            if (confirm("确定删除？"))
+            {
+                ApiManufacturer.delete({manufacturerId: manufacturerId},
+                    function ()
+                    {
+                        location.reload();
+                    },
+                    function (response)
+                    {
+                        alert(response.data.returnMsg);
+                    }
+                );
+            }
+        };
+    }
+]);
+
+appControllers.controller("ManufacturerConfigController", ["$scope", "$stateParams", "$state", "ApiManufacturer",
+    function ($scope, $stateParams, $state, ApiManufacturer)
+    {
+        $scope.manufacturer = {name:""};
+
+        var manufacturerId = $stateParams.manufacturerId;
+        if (manufacturerId != 0)
+        {
+            $scope.manufacturer = ApiManufacturer.get({manufacturerId:manufacturerId},
+                function () {},
+                function (response) {
+                    alert(response.data.returnMsg);
+                }
+            );
+        }
+
+        $scope.doConfig = function ()
+        {
+            if (manufacturerId == 0) // 新增
+            {
+                ApiManufacturer.create(null, $scope.manufacturer,
+                    function ()
+                    {
+                        $state.go("main.manufacturers");
+                    },
+                    function (response) {
+                        alert(response.data.returnMsg);
+                    }
+                );
+            }
+            else // 修改
+            {
+                $scope.manufacturer.$update(
+                    function ()
+                    {
+                        $state.go("main.manufacturers");
+                    },
+                    function (response) {
+                        alert(response.data.returnMsg);
+                    }
+                );
+            }
+        };
+    }
+]);
+
 appControllers.controller("MapController", ["$scope", "$stateParams", "ApiProduct",
     function ($scope, $stateParams, ApiProduct)
     {
@@ -157,6 +233,22 @@ appControllers.controller("MapController", ["$scope", "$stateParams", "ApiProduc
         if ($stateParams.projectId)
         {
             ApiProduct.query({projectId:$stateParams.projectId},
+                function (products)
+                {
+                    for (var i = 0; i < products.length; i++)
+                    {
+                        addProductPoint(products[i]);
+                    }
+                },
+                function (response)
+                {
+                    alert(response.data.returnMsg);
+                }
+            );
+        }
+        else if ($stateParams.manufacturerId)
+        {
+            ApiProduct.query({manufacturerId:$stateParams.manufacturerId},
                 function (products)
                 {
                     for (var i = 0; i < products.length; i++)

@@ -48,6 +48,21 @@ eastApp.config(["$stateProvider", "$urlRouterProvider",
                 url: "/products/{productId}/map",
                 templateUrl: "templates/map.html",
                 controller: "MapController"
+            })
+            .state("main.manufacturers", {
+                url: "/manufacturers",
+                templateUrl: "templates/manufacturers.html",
+                controller: "ManufacturersController"
+            })
+            .state("main.manufacturerConfig", {
+                url: "/manufacturers/{manufacturerId}",
+                templateUrl: "templates/manufacturerConfig.html",
+                controller: "ManufacturerConfigController"
+            })
+            .state("main.manufacturerMap", {
+                url: "/manufacturers/{manufacturerId}/map",
+                templateUrl: "templates/map.html",
+                controller: "MapController"
             });
     }
 ]);
