@@ -164,6 +164,85 @@ appControllers.controller("ManufacturerConfigController", ["$scope", "$statePara
     }
 ]);
 
+appControllers.controller("UsersController", ["$scope", "ApiUser",
+    function ($scope, ApiUser)
+    {
+        $scope.users = ApiUser.query(
+            function () {},
+            function (response)
+            {
+                alert(response.data.returnMsg);
+            }
+        );
+
+        $scope.deleteUser = function (userId)
+        {
+            if (confirm("确定删除？"))
+            {
+                ApiUser.delete({userId: userId},
+                    function ()
+                    {
+                        location.reload();
+                    },
+                    function (response)
+                    {
+                        alert(response.data.returnMsg);
+                    }
+                );
+            }
+        };
+    }
+]);
+
+appControllers.controller("UserConfigController", ["$scope", "$stateParams", "$state", "ApiUser", "md5",
+    function ($scope, $stateParams, $state, ApiUser, md5)
+    {
+        $scope.user = {username:"", level:2};
+        $scope.password = "";
+        $scope.userLevelOptions = [{level:1, label:"1级"},{level:2, label:"2级"},{level:3, label:"3级"}];
+
+        var userId = $stateParams.userId;
+        if (userId != 0)
+        {
+            $scope.user = ApiUser.get({userId:userId},
+                function () {},
+                function (response) {
+                    alert(response.data.returnMsg);
+                }
+            );
+        }
+
+        $scope.doConfig = function ()
+        {
+            $scope.user.password = md5.createHash($scope.password);
+            if (userId == 0) // 新增
+            {
+                ApiUser.create(null, $scope.user,
+                    function ()
+                    {
+                        $state.go("main.users");
+                    },
+                    function (response) {
+                        alert(response.data.returnMsg);
+                    }
+                );
+            }
+            else // 修改
+            {
+                $scope.user.$update(
+                    function ()
+                    {
+                        $state.go("main.users");
+                    },
+                    function (response) {
+                        alert(response.data.returnMsg);
+                    }
+                );
+            }
+        };
+    }
+]);
+
 appControllers.controller("MapController", ["$scope", "$stateParams", "ApiProduct",
     function ($scope, $stateParams, ApiProduct)
     {

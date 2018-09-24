@@ -63,6 +63,16 @@ eastApp.config(["$stateProvider", "$urlRouterProvider",
                 url: "/manufacturers/{manufacturerId}/map",
                 templateUrl: "templates/map.html",
                 controller: "MapController"
+            })
+            .state("main.users", {
+                url: "/users",
+                templateUrl: "templates/users.html",
+                controller: "UsersController"
+            })
+            .state("main.userConfig", {
+                url: "/users/{userId}",
+                templateUrl: "templates/userConfig.html",
+                controller: "UserConfigController"
             });
     }
 ]);
